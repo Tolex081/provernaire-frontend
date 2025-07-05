@@ -1,0 +1,155 @@
+/* frontend/src/components/Lifeline/Lifeline.css */
+
+.lifelines-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px; /* Space between toggle button and panel */
+  width: 200px; /* Fixed width for the wrapper */
+  flex-shrink: 0; /* Prevent shrinking */
+  position: sticky; /* Keep it visible */
+  top: 20px;
+  align-self: flex-start; /* Align to the top */
+}
+
+.lifelines-toggle-button {
+  background: linear-gradient(90deg, #61C3FF, #B753FF); /* Blue to Purple */
+  color: #ffffff;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 10px;
+  font-size: 1em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  width: 100%; /* Full width of its wrapper */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.lifelines-toggle-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+  filter: brightness(1.1);
+}
+
+.lifelines-container {
+  background: rgba(31, 41, 55, 0.8); /* Dark grey/blue background */
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  padding: 20px;
+  width: 100%; /* Take full width of wrapper */
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  animation: slideInFromTop 0.5s ease-out forwards; /* Animation for panel appearance */
+}
+
+@keyframes slideInFromTop {
+  from { transform: translateY(-20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.lifelines-title {
+  font-size: 1.4em;
+  color: #B0FF6F; /* Green */
+  text-align: center;
+  margin-bottom: 20px;
+  text-shadow: 0 0 5px rgba(176, 255, 111, 0.5);
+}
+
+.lifeline-buttons-grid {
+  display: grid;
+  grid-template-columns: 1fr; /* Stack buttons vertically */
+  gap: 15px;
+}
+
+.lifeline-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 12px 15px;
+  background: linear-gradient(90deg, #B753FF, #FF54D7); /* Purple to Pink */
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  font-size: 1em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.lifeline-button:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+  filter: brightness(1.1);
+}
+
+.lifeline-button.used {
+  background: #333; /* Darker background when used */
+  color: #999;
+  cursor: not-allowed;
+  opacity: 0.6;
+  box-shadow: none;
+}
+
+.lifeline-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.lifeline-icon {
+  font-size: 1.5em;
+}
+
+.lifeline-text {
+  flex-grow: 1;
+  text-align: left;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1024px) {
+  .lifelines-wrapper {
+    width: 90%; /* Take more width when stacked */
+    margin-top: 20px;
+    position: relative; /* Remove sticky */
+    top: auto;
+    align-self: center;
+  }
+
+  .lifeline-buttons-grid {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); /* Allow multiple columns on wider mobile */
+  }
+}
+
+@media (max-width: 768px) {
+  .lifelines-wrapper {
+    padding: 0; /* Remove padding from wrapper, let container handle it */
+  }
+  .lifelines-container {
+    padding: 15px;
+  }
+
+  .lifelines-title {
+    font-size: 1.2em;
+  }
+
+  .lifeline-button {
+    font-size: 0.9em;
+    padding: 10px 12px;
+  }
+
+  .lifeline-icon {
+    font-size: 1.2em;
+  }
+}
+
+@media (max-width: 480px) {
+  .lifeline-buttons-grid {
+    grid-template-columns: 1fr; /* Stack vertically on very small screens */
+  }
+}

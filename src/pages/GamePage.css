@@ -1,0 +1,651 @@
+/* frontend/src/pages/GamePage.css */
+
+/* Main Game Page Container */
+.game-page-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #1a022b; /* Dark background */
+  font-family: 'Inter', sans-serif;
+  color: #ffffff;
+  position: relative;
+  overflow: hidden; /* Hide overflow */
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* Background Animation (consistent with other pages) */
+.background-animation {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.floating-shapes {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.shape {
+  position: absolute;
+  /* Using Purple and Green from succinct codes */
+  background: linear-gradient(45deg, rgba(183, 83, 255, 0.8), rgba(176, 255, 111, 0.8));
+  border-radius: 50%;
+  opacity: 0.6;
+  animation: float 15s infinite ease-in-out;
+}
+
+.shape-0 {
+  width: 150px;
+  height: 150px;
+  top: 10%;
+  left: 5%;
+  animation-delay: 0s;
+  animation-duration: 18s;
+}
+
+.shape-1 {
+  width: 100px;
+  height: 100px;
+  top: 60%;
+  left: 80%;
+  animation-delay: 3s;
+  animation-duration: 20s;
+}
+
+.shape-2 {
+  width: 200px;
+  height: 200px;
+  top: 30%;
+  left: 40%;
+  animation-delay: 6s;
+  animation-duration: 22s;
+}
+
+.shape-3 {
+  width: 120px;
+  height: 120px;
+  top: 85%;
+  left: 15%;
+  animation-delay: 9s;
+  animation-duration: 16s;
+}
+
+@keyframes float {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.6;
+  }
+  25% {
+    transform: translate(20px, -20px) scale(1.05);
+    opacity: 0.7;
+  }
+  50% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.6;
+  }
+  75% {
+    transform: translate(-20px, 20px) scale(0.95);
+    opacity: 0.5;
+  }
+  100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.6;
+  }
+}
+
+/* Loading Screen */
+.game-loading-screen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #1a022b;
+  color: #ffffff;
+  font-family: 'Inter', sans-serif;
+  flex-direction: column;
+}
+
+.loading-content {
+  text-align: center;
+}
+
+.loading-spinner {
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  border-top: 4px solid #B753FF; /* Purple from succinct codes */
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 20px;
+}
+
+.loading-text {
+  font-size: 1.2em;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+
+/* Main Game Content Wrapper */
+/* This wrapper now controls the max-width for the main content, but not the header */
+.game-content-wrapper {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px; /* Max width for the main game layout below the header */
+  padding: 0 20px; /* Padding for side content */
+  box-sizing: border-box;
+}
+
+/* Game Header - now spans full width of the page */
+.game-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%; /* Take full width of the game-page-container */
+  background: rgba(55, 39, 31, 0.8); /* Dark grey/blue background */
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  padding: 15px 25px;
+  margin-bottom: 20px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  max-width: calc(100% - 40px); /* Account for game-page-container padding */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-pfp {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #B0FF6F; /* Green from succinct codes */
+}
+
+.user-username {
+  font-size: 1.1em;
+  font-weight: bold;
+  color: #B0FF6F; /* Green from succinct codes */
+}
+
+.user-team {
+  padding: 5px 10px;
+  border-radius: 15px;
+  color: #000; /* Black text for contrast */
+  font-size: 0.8em;
+  font-weight: bold;
+}
+
+.score-info {
+  text-align: center;
+}
+
+.current-prize {
+  font-size: 1.4em;
+  font-weight: bold;
+  color: #61C3FF; /* Blue from succinct codes for prize */
+  text-shadow: 0 0 8px rgba(97, 195, 255, 0.5);
+}
+
+.question-number {
+  font-size: 0.9em;
+  color: #d1d5db;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.leaderboard-button {
+  background: linear-gradient(90deg, #B753FF, #FF54D7); /* Purple to Pink */
+  color: #ffffff;
+  padding: 8px 15px;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.9em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+}
+
+.leaderboard-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  filter: brightness(1.1);
+}
+
+.leaderboard-icon {
+  font-size: 1.2em;
+}
+
+.lifelines-timer-section {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.timer-display {
+  font-size: 1.2em;
+  font-weight: bold;
+  padding: 8px 15px;
+  border-radius: 10px;
+  border: 2px solid;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.timer-critical {
+  animation: pulse-red 1s infinite alternate;
+}
+
+@keyframes pulse-red {
+  from { box-shadow: 0 0 10px #FF54D780; } /* Pink */
+  to { box-shadow: 0 0 20px #FF54D7FF; } /* Pink */
+}
+
+
+/* Main Game Layout: Lifelines (Left) | Question (Center) | Prize Ladder (Right) */
+.main-game-layout {
+  display: flex;
+  justify-content: center; /* Center the entire layout */
+  align-items: flex-start; /* Align items to the top */
+  width: 100%;
+  gap: 40px; /* Increased gap between columns for better spacing */
+  flex-wrap: nowrap; /* Prevent wrapping on larger screens */
+}
+
+/* Lifelines Container - now directly managed by main-game-layout */
+/* The .lifelines-wrapper (from Lifeline.css) will be the direct child */
+/* No specific styles here, as Lifeline.css handles its internal layout */
+/* Lifelines wrapper width is 200px from Lifeline.css */
+
+/* Question Container (center) */
+.question-container {
+  flex-grow: 1; /* Allows question card to take most space */
+  max-width: 800px; /* Max width for question card */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 1; /* Allow it to shrink if needed */
+  min-width: 300px; /* Ensure it doesn't get too small */
+}
+
+.question-card {
+  background: rgba(45, 1, 71, 0.7); /* Dark purple background */
+  backdrop-filter: blur(15px);
+  border-radius: 20px;
+  padding: 30px;
+  width: 100%;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  margin-bottom: 20px;
+}
+
+.question-text {
+  font-size: 1.8em;
+  color: #ffffff;
+  margin-bottom: 30px;
+  text-align: center;
+  line-height: 1.4;
+}
+
+.answers-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Two columns */
+  gap: 15px;
+  width: 100%;
+  margin-bottom: 30px;
+}
+
+.answer-button {
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+  padding: 15px 20px;
+  text-align: left;
+  color: #ffffff;
+  font-size: 1.1em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.answer-button:hover:not(:disabled) {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-color: #B753FF; /* Purple */
+  transform: translateY(-2px);
+}
+
+.answer-button.selected {
+  background-color: #B753FF; /* Purple */
+  border-color: #B753FF;
+  box-shadow: 0 0 15px rgba(183, 83, 255, 0.5);
+  animation: pulseSelected 0.8s infinite alternate;
+}
+
+@keyframes pulseSelected {
+  from { box-shadow: 0 0 10px rgba(183, 83, 255, 0.5); }
+  to { box-shadow: 0 0 20px rgba(183, 83, 255, 0.8); }
+}
+
+.answer-button.removed {
+  background-color: rgba(255, 84, 215, 0.1); /* Light Pink */
+  border-color: rgba(255, 84, 215, 0.3);
+  text-decoration: line-through;
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.answer-button.correct {
+  background-color: rgba(176, 255, 111, 0.2); /* Light Green */
+  border-color: #B0FF6F; /* Green */
+  box-shadow: 0 0 15px rgba(176, 255, 111, 0.7);
+  animation: pulse-green 1s forwards;
+}
+
+.answer-button.incorrect {
+  background-color: rgba(255, 84, 215, 0.2); /* Light Pink */
+  border-color: #FF54D7; /* Pink */
+  box-shadow: 0 0 15px rgba(255, 84, 215, 0.7);
+  animation: pulse-red-incorrect 1s forwards;
+}
+
+@keyframes pulse-green {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+  100% { transform: scale(1); }
+}
+
+@keyframes pulse-red-incorrect {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+  100% { transform: scale(1); }
+}
+
+.answer-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.answer-letter {
+  font-weight: bold;
+  margin-right: 5px;
+  color: #B0FF6F; /* Green */
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  width: 100%;
+}
+
+.walk-away-button, .submit-button {
+  padding: 12px 25px;
+  border-radius: 10px;
+  font-size: 1.1em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.walk-away-button {
+  background: linear-gradient(90deg, #FF955E, #FF54D7); /* Orange to Pink */
+  color: #ffffff;
+}
+
+.walk-away-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.walk-away-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.walk-away-amount {
+  display: block;
+  font-size: 0.8em;
+  font-weight: normal;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.submit-button {
+  background: linear-gradient(90deg, #B0FF6F, #B753FF); /* Green to Purple */
+  color: #1a022b; /* Dark text for contrast */
+}
+
+.submit-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.submit-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Prize Ladder - now directly managed by main-game-layout */
+.prize-ladder {
+  background: rgba(31, 41, 55, 0.8); /* Dark grey/blue background */
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  padding: 20px;
+  width: 220px; /* Increased width for desktop */
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  position: sticky;
+  top: 20px;
+  align-self: flex-start;
+  flex-shrink: 0; /* Prevent it from shrinking */
+}
+
+.prize-ladder-header {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.prize-ladder-title {
+  font-size: 1.5em;
+  color: #61C3FF; /* Blue from succinct codes */
+  text-shadow: 0 0 8px rgba(97, 195, 255, 0.5);
+}
+
+.prize-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 15px;
+  margin-bottom: 5px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.prize-item.current {
+  background: linear-gradient(90deg, #B753FF, #FF54D7); /* Purple to Pink */
+  box-shadow: 0 0 15px rgba(183, 83, 255, 0.7);
+  transform: scale(1.02);
+}
+
+.prize-item.completed {
+  background-color: rgba(176, 255, 111, 0.15); /* Light Green for completed */
+  color: #B0FF6F; /* Green */
+}
+
+.prize-number {
+  font-weight: bold;
+  color: #e0e0e0;
+}
+
+.prize-item.completed .prize-number {
+  color: #B0FF6F;
+}
+
+.prize-amount {
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.prize-item.completed .prize-amount {
+  color: #B0FF6F;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1024px) {
+  .game-header {
+    flex-direction: column;
+    gap: 15px;
+    padding: 15px;
+    max-width: calc(100% - 20px); /* Adjust for smaller screens */
+  }
+
+  .user-info, .score-info, .header-actions {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .main-game-layout {
+    flex-direction: column; /* Stack columns vertically */
+    align-items: center; /* Center items when stacked */
+    gap: 20px; /* Reduced gap when stacked */
+  }
+
+  .prize-ladder {
+    width: 90%; /* Take more width when stacked */
+    max-width: 300px; /* Limit max width even when 90% */
+    margin-left: 0;
+    margin-top: 20px;
+    position: relative; /* Remove sticky on smaller screens */
+    top: auto;
+    align-self: center;
+  }
+
+  .question-container {
+    width: 100%; /* Take full width when stacked */
+    max-width: 700px; /* Adjust max-width for better fit */
+  }
+}
+
+@media (max-width: 768px) {
+  .game-page-container {
+    padding: 10px;
+  }
+
+  .game-header {
+    padding: 10px;
+  }
+
+  .user-pfp {
+    width: 40px;
+    height: 40px;
+  }
+
+  .user-username {
+    font-size: 1em;
+  }
+
+  .current-prize {
+    font-size: 1.2em;
+  }
+
+  .question-number {
+    font-size: 0.8em;
+  }
+
+  .leaderboard-button {
+    padding: 6px 10px;
+    font-size: 0.8em;
+  }
+
+  .timer-display {
+    font-size: 1em;
+    padding: 6px 10px;
+  }
+
+  .prize-ladder-title {
+    font-size: 1.3em;
+  }
+
+  .prize-item {
+    padding: 8px 10px;
+  }
+
+  .question-card {
+    padding: 20px;
+  }
+
+  .question-text {
+    font-size: 1.5em;
+  }
+
+  .answers-grid {
+    grid-template-columns: 1fr; /* Single column on small screens */
+  }
+
+  .answer-button {
+    font-size: 1em;
+    padding: 12px 15px;
+  }
+
+  .walk-away-button, .submit-button {
+    padding: 10px 20px;
+    font-size: 1em;
+  }
+
+  .prize-ladder {
+    width: 180px; /* Reduced width for mobile */
+    max-width: 180px; /* Ensure it stays small */
+  }
+}
+
+@media (max-width: 480px) {
+  .game-header {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .user-info, .score-info, .header-actions {
+    margin-bottom: 10px;
+  }
+
+  .question-text {
+    font-size: 1.2em;
+  }
+
+  .prize-ladder {
+    width: 100%; /* Take full width on very small screens */
+    max-width: none; /* Remove max-width constraint */
+  }
+}
