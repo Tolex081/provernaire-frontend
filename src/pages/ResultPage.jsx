@@ -1,250 +1,193 @@
 // frontend/src/pages/ResultPage.jsx
-import React, { useRef, useEffect, useState, useCallback } from 'react';
-import html2canvas from 'html2canvas'; // Note: This should be 'html2canvas' in a real project
-import './ResultPage.css'; // Import the CSS for this page
+import React, { useState, useEffect, useCallback } from 'react';
+import './ResultPage.css'; // Ensure this CSS file exists and is styled
+import Modal from '../components/Modal/Modal'; // Import the Modal component
 
 /**
  * ResultPage Component
- * Displays the final results of a game, including score and game status.
- * Provides options to play again, navigate to the leaderboard, and download/share results.
+ * Displays the outcome of the game (win/lose/walk away/time up), final score,
+ * and provides options to play again, view leaderboard, or stake tokens.
+ *
  * @param {Object} currentUser - The current logged-in user object { id, username, pfpUrl, team: { name, color } }.
- * @param {Object} gameResult - Object containing the game's outcome { score, reason, timestamp }.
- * @param {function} onPlayAgain - Callback to restart the game (navigate to preview).
+ * @param {Object} gameResult - Object containing the game's final score and reason { score, reason, timestamp }.
+ * @param {function} onPlayAgain - Callback to restart the game (go back to preview).
  * @param {function} onNavigateToLeaderboard - Callback to navigate to the leaderboard.
- * @param {function} onScoreUpdate - Callback to update score on the backend.
+ * @param {function} onNavigateToStake - Callback to navigate to the staking page.
+ * @param {function} onScoreUpdate - Callback to ensure final score is sent to backend.
  */
-const ResultPage = ({ currentUser, gameResult, onPlayAgain, onNavigateToLeaderboard, onScoreUpdate }) => {
-  const resultCardRef = useRef(null);
-  const [scoreSubmitted, setScoreSubmitted] = useState(false);
+const ResultPage = ({
+  currentUser,
+  gameResult,
+  onPlayAgain,
+  onNavigateToLeaderboard,
+  onNavigateToStake,
+  onScoreUpdate,
+}) => {
+  const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
+  const [hasFinalScoreBeenUpdated, setHasFinalScoreBeenUpdated] = useState(false);
 
-  // Default values if props are not fully provided
-  const finalScore = gameResult?.score || 0;
-  const gameReason = gameResult?.reason || 'unknown';
-  const username = currentUser?.username || 'Player';
-  const pfpUrl = currentUser?.pfpUrl || 'https://placehold.co/80x80/cccccc/000000?text=PFP';
-  const teamName = currentUser?.team?.name || 'Unknown Team';
-  const teamColor = currentUser?.team?.color || '#6A0DAD';
-
-  // Memoized callback to submit the final score to the backend
-  const submitFinalScore = useCallback(() => {
-    // Only submit if onScoreUpdate is provided and score hasn't been submitted yet
-    if (onScoreUpdate && finalScore !== null && !scoreSubmitted) {
-      // Determine question number based on finalScore, assuming prize structure from GamePage
-      // This is a simplified calculation; a more robust solution might pass the actual questionNumber from GamePage
-      let questionNumberAchieved = 0;
-      if (finalScore >= 1000) { // Assuming 1000 is the first prize tier
-        const prizeStructure = [1000, 2500, 5000, 10000, 25000, 50000, 100000, 250000, 500000, 1000000];
-        questionNumberAchieved = prizeStructure.indexOf(finalScore) + 1;
-      }
-
-      onScoreUpdate({
-        userId: currentUser.id, // Use userId for backend identification
-        username: username,
-        pfpUrl: pfpUrl,
-        team: currentUser.team, // Pass the full team object
-        score: finalScore,
-        questionNumber: questionNumberAchieved,
-        completed: gameReason === 'win',
-        failed: gameReason === 'lose' || gameReason === 'time_up',
-        walkedAway: gameReason === 'walk_away',
-        timeUp: gameReason === 'time_up',
-        gameStatus: gameReason // Pass the reason as gameStatus
-      });
-      setScoreSubmitted(true); // Mark score as submitted
+  // Determine game outcome message and styling
+  const getOutcomeDetails = useCallback(() => {
+    switch (gameResult?.reason) {
+      case 'win':
+        return {
+          title: '🎉 Congratulations, Provernaire!',
+          message: `You answered all 10 questions and won ${gameResult.score.toLocaleString()} $PROVE!`,
+          class: 'result-win',
+          icon: '🏆',
+          animationClass: 'win-animation'
+        };
+      case 'lose':
+        return {
+          title: 'Game Over!',
+          message: `You answered incorrectly. Your secured prize was ${gameResult.score.toLocaleString()} $PROVE.`,
+          class: 'result-lose',
+          icon: '❌',
+          animationClass: 'lose-animation'
+        };
+      case 'walk_away':
+        return {
+          title: 'Smart Move!',
+          message: `You walked away with a secured prize of ${gameResult.score.toLocaleString()} $PROVE.`,
+          class: 'result-walk-away',
+          icon: '🚶',
+          animationClass: 'walk-away-animation'
+        };
+      case 'time_up':
+        return {
+          title: 'Time Ran Out!',
+          message: `You ran out of time. Your secured prize was ${gameResult.score.toLocaleString()} $PROVE.`,
+          class: 'result-time-up',
+          icon: '⏰',
+          animationClass: 'time-up-animation'
+        };
+      default:
+        return {
+          title: 'Game Ended',
+          message: `Your final score is ${gameResult?.score?.toLocaleString() || 0} $PROVE.`,
+          class: 'result-default',
+          icon: '🎮',
+          animationClass: ''
+        };
     }
-  }, [onScoreUpdate, finalScore, scoreSubmitted, currentUser, username, pfpUrl, gameReason]);
+  }, [gameResult]);
 
-  // Effect to submit score when component mounts and score is available
+  const outcome = getOutcomeDetails();
+
+  // Ensure the final score is updated on the backend when ResultPage loads
   useEffect(() => {
-    submitFinalScore();
-  }, [submitFinalScore]); // Depend on submitFinalScore memoized callback
+    if (currentUser?.id && gameResult && !hasFinalScoreBeenUpdated) {
+      console.log('ResultPage: Sending final game result to backend...');
+      // The GamePage already sends updates, but this ensures the final status is recorded
+      // if the page is refreshed or navigated to directly.
+      onScoreUpdate({
+        userId: currentUser.id,
+        username: currentUser.username,
+        pfpUrl: currentUser.pfpUrl,
+        team: currentUser.team,
+        score: gameResult.score,
+        questionNumber: gameResult.reason === 'win' ? 10 : (gameResult.reason === 'walk_away' ? gameResult.questionNumber : (gameResult.reason === 'lose' || gameResult.reason === 'time_up' ? gameResult.questionNumber : 0)),
+        completed: gameResult.reason === 'win',
+        failed: gameResult.reason === 'lose',
+        walkedAway: gameResult.reason === 'walk_away',
+        timeUp: gameResult.reason === 'time_up',
+        gameStatus: gameResult.reason === 'win' ? 'finished' : (gameResult.reason === 'walk_away' ? 'walked_away' : 'game_over')
+      });
+      setHasFinalScoreBeenUpdated(true);
+    }
+  }, [currentUser, gameResult, onScoreUpdate, hasFinalScoreBeenUpdated]);
 
-  // Function to download the result card as an image
-  const downloadResult = async () => {
-    if (resultCardRef.current) {
-      try {
-        // Add clean-export class to hide elements not desired in the screenshot
-        resultCardRef.current.classList.add('clean-export');
 
-        const canvas = await html2canvas(resultCardRef.current, {
-          backgroundColor: null, // Transparent background
-          scale: 2, // Higher scale for better quality
-          useCORS: true, // Enable cross-origin images if any
-          // Specify width/height if you want a fixed size for the screenshot,
-          // otherwise, html2canvas will use the element's rendered size.
-          // width: 600, // Example fixed width
-          // height: 800, // Example fixed height
-        });
+  // Fallback if gameResult is not available
+  if (!gameResult) {
+    return (
+      <div className="result-page-container">
+        <div className="result-card">
+          <h2 className="result-title">No Game Result Found</h2>
+          <p className="result-message">Please play a game first to see your results.</p>
+          <button className="result-button primary-button" onClick={onPlayAgain}>
+            Play Now!
+          </button>
+        </div>
+      </div>
+    );
+  }
 
-        // Remove the class after rendering to restore original display
-        resultCardRef.current.classList.remove('clean-export');
+  // --- NEW: Handle navigation to the external staking platform ---
+  const handleNavigateToExternalStake = () => {
+    if (gameResult.score > 0) {
+      // IMPORTANT: Replace this with the actual URL where you will deploy your new staking platform.
+      // For local testing, it might be 'http://localhost:8080/index.html' or similar.
+      // For a deployed version, it would be 'https://your-staking-platform-url.vercel.app'.
+      const stakingPlatformURL = `https://provernaire-staker.vercel.app/?score=${gameResult.score}`; // Example local URL
+      // OR for deployed: const stakingPlatformURL = `https://your-staking-platform-url.vercel.app?score=${gameResult.score}`;
 
-        const link = document.createElement('a');
-        link.download = `succinct-trivia-${username.replace(/[^a-zA-Z0-9]/g, '')}-${finalScore}prove.png`;
-        link.href = canvas.toDataURL('image/png'); // Get data URL as PNG
-        link.click(); // Trigger download
-      } catch (error) {
-        console.error('❌ Error generating image:', error);
-        // Optionally show a modal message to the user
-      }
+      window.open(stakingPlatformURL, '_blank'); // Open in a new tab/window
+      // Alternatively, if you want to navigate within the same tab:
+      // window.location.href = stakingPlatformURL;
+    } else {
+      setModalMessage('You need a score greater than 0 to stake tokens.');
+      setShowModal(true);
     }
   };
-
-  // Function to share result to X (Twitter)
-  const shareToX = () => {
-    const text = `Just won ${finalScore.toLocaleString()} $PROVE tokens playing Succinct Labs Trivia! 🎯🚀 Think you can beat my score? My team: ${teamName}!`;
-    const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
-    window.open(url, '_blank', 'noopener,noreferrer'); // Open in new tab, secure
-  };
-
-  // Determine the message and emoji based on the final score
-  const getResultMessage = useCallback(() => {
-    if (finalScore === 0) {
-      return {
-        title: "Better Luck Next Time!",
-        message: "Don't worry, every expert was once a beginner. Study up on Succinct Labs and try again!",
-        emoji: "😅"
-      };
-    } else if (finalScore < 10000) {
-      return {
-        title: "Great Start!",
-        message: "You're on your way to becoming a Succinct Labs expert!",
-        emoji: "🎯"
-      };
-    } else if (finalScore < 50000) {
-      return {
-        title: "Impressive Knowledge!",
-        message: "You really know your stuff about Succinct Labs!",
-        emoji: "🔥"
-      };
-    } else if (finalScore < 100000) {
-      return {
-        title: "Succinct Master!",
-        message: "Outstanding! You're a true Succinct Labs expert!",
-        emoji: "⭐"
-      };
-    } else { // finalScore >= 100000
-      return {
-        title: "PERFECT GAME!",
-        message: "Incredible! You've mastered everything about Succinct Labs!",
-        emoji: "🏆"
-      };
-    }
-  }, [finalScore]); // Recalculate only if finalScore changes
-
-  const resultDisplay = getResultMessage(); // Get the result message and emoji
 
   return (
-    <div className="result-page-container">
-      {/* 3D Background Animation */}
-      <div className="background-animation">
-        <div className="floating-shapes celebration">
-          {[...Array(30)].map((_, i) => (
-            <div key={i} className={`shape shape-${i % 6} celebration-shape`}></div>
-          ))}
-        </div>
-        <div className="confetti">
-          {[...Array(50)].map((_, i) => (
-            <div key={i} className={`confetti-piece confetti-${i % 4}`}></div>
+    <div className={`result-page-container ${outcome.class}`}>
+      {/* Background Animation - can be dynamic based on outcome */}
+      <div className={`animated-background ${outcome.animationClass}`}>
+        <div className="floating-shapes">
+          {[...Array(20)].map((_, i) => (
+            <div key={i} className={`shape shape-${i % 4}`}></div>
           ))}
         </div>
       </div>
 
       <div className="result-content-wrapper">
-        <div ref={resultCardRef} className="result-card">
-          <div className="result-card-header">
-            <div className="succinct-logo">
-              <span className="logo-text">Who Wants To Be A Provernaire</span>
-              <span className="logo-subtitle">Trivia Challenge</span>
+        <div className={`result-card ${outcome.class}`}>
+          <div className="result-icon">{outcome.icon}</div>
+          <h2 className="result-title">{outcome.title}</h2>
+          <p className="result-message">{outcome.message}</p>
+
+          <div className="user-summary">
+            <img
+              src={currentUser?.pfpUrl || 'https://placehold.co/80x80/cccccc/000000?text=PFP'}
+              alt="User Profile"
+              className="user-pfp"
+              onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.co/80x80/cccccc/000000?text=PFP'; }}
+            />
+            <div className="user-details">
+              <span className="username">@{currentUser?.username || 'Guest'}</span>
+              <span className="team-name" style={{ color: currentUser?.team?.color }}>
+                {currentUser?.team?.name || 'No Team'}
+              </span>
             </div>
           </div>
 
-          <div className="result-card-content">
-            <div className="user-info-large">
-              <img
-                src={pfpUrl}
-                alt="Profile"
-                className="user-pfp-large"
-                onError={(e) => { e.target.onerror = null; e.target.src = 'https://placehold.co/80x80/cccccc/000000?text=PFP'; }}
-              />
-              <div className="user-details">
-                <h2 className="username-large">{username}</h2>
-                <div
-                  className="team-badge-large"
-                  style={{ backgroundColor: teamColor }}
-                >
-                  {teamName}
-                </div>
-              </div>
-            </div>
-
-            <div className="score-display">
-              <div className="result-emoji">{resultDisplay.emoji}</div>
-              <h1 className="final-score">{finalScore.toLocaleString()}</h1>
-              <div className="prove-token">$PROVE TOKENS</div>
-            </div>
-
-            <div className="result-message">
-              <h3 className="result-title">{resultDisplay.title}</h3>
-              <p className="result-text">{resultDisplay.message}</p>
-            </div>
-
-            {finalScore > 0 && (
-              <div className="staking-reminder">
-                <div className="reminder-icon">💎</div>
-                <div className="reminder-text">
-                  <strong>Don't forget to stake your $PROVE tokens!</strong>
-                  <br />
-                  Maximize your rewards in the Succinct ecosystem
-                </div>
-              </div>
-            )}
-
-            <div className="card-footer">
-              <div className="succinct-branding">
-                <span>Powered by Succinct Labs</span>
-                <div className="team-colors">
-                  <div className="color-dot" style={{ backgroundColor: '#B753FF' }}></div>
-                  <div className="color-dot" style={{ backgroundColor: '#FF955E' }}></div>
-                  <div className="color-dot" style={{ backgroundColor: '#B0FF6F' }}></div>
-                  <div className="color-dot" style={{ backgroundColor: '#61C3FF' }}></div>
-                  <div className="color-dot" style={{ backgroundColor: '#FF54D7' }}></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Action Buttons */}
-        <div className="result-actions">
-          <div className="primary-actions">
-            <button className="download-button" onClick={downloadResult}>
-              <span>Download Result</span>
+          <div className="action-buttons">
+            <button className="result-button primary-button" onClick={onPlayAgain}>
+              Play Again
             </button>
-            <button className="share-x-button" onClick={shareToX}>
-              <span>Share on X</span>
+            <button className="result-button secondary-button" onClick={onNavigateToLeaderboard}>
+              View Leaderboard
             </button>
-          </div>
-
-          <div className="secondary-actions">
-            <button className="play-again-button" onClick={onPlayAgain}>
-              <span>Play Again</span>
-            </button>
-
-            <button className="leaderboard-button" onClick={onNavigateToLeaderboard}>
-              <span>Leaderboard</span>
-            </button>
-          </div>
-
-          {finalScore > 0 && (
-            <div className="staking-action">
-              <button className="stake-button">
-                <span>Stake Your $PROVE Tokens</span>
+            {/* NEW: Stake Tokens Button - now calls the external navigation handler */}
+            {gameResult.score > 0 && (
+              <button className="result-button stake-button" onClick={handleNavigateToExternalStake}>
+                Stake Your {gameResult.score.toLocaleString()} $PROVE
               </button>
-            </div>
+            )}
+          </div>
+
+          {/* Staking Reminder (optional, can be removed if stake button is prominent) */}
+          {gameResult.score > 0 && (
+            <div className="staking-reminder">
+              <p>Don't forget to stake your $PROVE tokens!</p>
+          </div>
           )}
         </div>
       </div>
+      <Modal show={showModal} onClose={() => setShowModal(false)} message={modalMessage} />
     </div>
   );
 };
