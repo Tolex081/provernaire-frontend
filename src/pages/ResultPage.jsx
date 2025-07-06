@@ -168,7 +168,8 @@ const ResultPage = ({
 
   // --- Share on X (Twitter) Function ---
   const handleShareOnX = useCallback(() => {
-    const tweetText = `I just played Who Wants To Be A Provernaire and ${outcome.message} My final score is ${gameResult.score.toLocaleString()} $PROVE! Test your knowledge! #ProvernaireGame #SuccinctLabs #ZK`;
+    const tweetText = `I just played Who Wants To Be A Provernaire and ${outcome.message} And i
+    I won ${gameResult.score.toLocaleString()} $PROVE! Test your knowledge!`;
     const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`;
     window.open(twitterUrl, '_blank', 'width=600,height=400');
   }, [gameResult, outcome.message]);
