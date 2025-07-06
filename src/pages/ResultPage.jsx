@@ -118,7 +118,7 @@ const ResultPage = ({
   // --- Handle navigation to the external staking platform ---
   const handleNavigateToExternalStake = useCallback(() => {
     if (gameResult.score > 0) {
-      const stakingPlatformURL = `http://localhost:3001/?score=${gameResult.score}`; // Example local URL
+      const stakingPlatformURL = `https://provernaire-staker.vercel.app/?score=${gameResult.score}`; // Example local URL
       window.open(stakingPlatformURL, '_blank');
     } else {
       setModalMessage('You need a score greater than 0 to stake tokens.');
