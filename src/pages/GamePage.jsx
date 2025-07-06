@@ -257,7 +257,7 @@ const GamePage = ({ currentUser, onGameEnd, onScoreUpdate, onNavigateToLeaderboa
       setModalMessage('50/50 used! Two incorrect answers have been removed.');
       setShowModal(true);
     } else if (type === 'phoneAddy' || type === 'phoneYinger') {
-      setModalMessage(`Your friend says the correct answer is: ${String.fromCharCode(65 + currentQuestionData.correctAnswer)} (${currentQuestionData.options[currentQuestionData.correctAnswer]})`);
+      setModalMessage(`Banger Bruhh that's easy the answer is: ${String.fromCharCode(65 + currentQuestionData.correctAnswer)} (${currentQuestionData.options[currentQuestionData.correctAnswer]})`);
       setShowModal(true);
     } else if (type === 'askAudience') {
       const votes = {};
