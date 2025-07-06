@@ -101,539 +101,37 @@
 }
 
 
-/* Result Content Wrapper */
-.result-content-wrapper {
+/* Result Content Wrapper - now holds card, buttons, and reminder */
+.result-container { /* Renamed from .result-content-wrapper */
   position: relative;
   z-index: 10;
   display: flex;
-  flex-direction: column; /* Card and buttons stacked */
-  justify-content: center;
+  flex-direction: column; /* Stack card, buttons, reminder vertically */
   align-items: center;
   width: 100%;
   max-width: 700px;
-  padding: 20px;
+  padding: 15px; /* Reduced padding */
   box-sizing: border-box;
-}
-
-.result-card {
-  background: rgba(31, 41, 55, 0.8); /* Dark grey/blue background */
-  backdrop-filter: blur(10px);
-  border-radius: 20px;
-  padding: 40px;
-  text-align: center;
-  width: 100%;
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  animation: fadeInScaleUp 0.5s ease-out forwards;
-  margin-bottom: 30px; /* Space between card and buttons */
-}
-
-/* Class to apply when exporting image via html2canvas */
-.result-card.clean-export {
-  /* Hide elements that shouldn't be in the screenshot */
-  /* For example, if you had a close button inside the card, you'd hide it here */
-}
-
-
-@keyframes fadeInScaleUp {
-  from { opacity: 0; transform: scale(0.9); }
-  to { opacity: 1; transform: scale(1); }
-}
-
-.result-card-header {
-  margin-bottom: 30px;
-}
-
-.succinct-logo .logo-text {
-  display: block;
-  font-size: 2.5rem;
-  font-weight: bold;
-  margin-bottom: 5px;
-  background: linear-gradient(135deg, #B753FF, #FF54D7); /* Purple to Pink */
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  animation: textGlow 2s infinite alternate;
-}
-
-.succinct-logo .logo-subtitle {
-  display: block;
-  font-size: 1.25rem;
-  color: #d1d5db;
-}
-
-@keyframes textGlow {
-  0% { text-shadow: 0 0 5px rgba(183, 83, 255, 0.5), 0 0 10px rgba(255, 84, 215, 0.3); }
-  100% { text-shadow: 0 0 10px rgba(183, 83, 255, 0.8), 0 0 20px rgba(255, 84, 215, 0.5); }
-}
-
-
-/* User Info Display */
-.user-info-large {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 30px;
-  gap: 20px;
-}
-
-.user-pfp-large {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 3px solid #B753FF; /* Purple */
-  box-shadow: 0 0 15px rgba(183, 83, 255, 0.6);
-}
-
-.user-details {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
-
-.username-large {
-  font-size: 1.8em;
-  color: #B0FF6F; /* Green */
-  margin-bottom: 5px;
-  text-shadow: 0 0 5px rgba(176, 255, 111, 0.5);
-}
-
-.team-badge-large {
-  padding: 8px 16px;
-  border-radius: 20px;
-  color: #000; /* Black text for contrast */
-  font-weight: bold;
-  display: inline-block;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-}
-
-/* Score Display */
-.score-display {
-  margin-bottom: 30px;
-}
-
-.result-emoji {
-  font-size: 4em;
-  margin-bottom: 10px;
-  animation: bounceIn 0.8s ease-out;
-}
-
-@keyframes bounceIn {
-  0% { transform: scale(0.3); opacity: 0; }
-  50% { transform: scale(1.1); opacity: 1; }
-  70% { transform: scale(0.9); }
-  100% { transform: scale(1); }
-}
-
-.final-score {
-  font-size: 3.5em;
-  font-weight: bold;
-  color: #61C3FF; /* Blue */
-  text-shadow: 0 0 15px rgba(97, 195, 255, 0.8);
-  margin-bottom: 5px;
-}
-
-.prove-token {
-  font-size: 1.2em;
-  color: #d1d5db;
-  font-weight: 500;
-}
-
-/* Result Message */
-.result-message {
-  margin-bottom: 40px;
-}
-
-.result-title {
-  font-size: 2em;
-  font-weight: bold;
-  margin-bottom: 10px;
-  color: #ffffff; /* Default, overridden by specific classes */
-}
-
-.result-text {
-  font-size: 1.1em;
-  color: #e0e0e0;
-  line-height: 1.5;
-}
-
-/* Staking Reminder */
-.staking-reminder {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  background-color: rgba(176, 255, 111, 0.1); /* Light green background */
-  border: 1px solid #B0FF6F; /* Green border */
-  border-radius: 10px;
-  padding: 15px 20px;
-  margin-bottom: 30px;
-  box-shadow: 0 0 15px rgba(176, 255, 111, 0.3);
-}
-
-.reminder-icon {
-  font-size: 2em;
-  flex-shrink: 0;
-}
-
-.reminder-text {
-  font-size: 0.95em;
-  color: #e0e0e0;
-  text-align: left;
-}
-
-.reminder-text strong {
-  color: #B0FF6F; /* Green */
-}
-
-/* Card Footer - Branding */
-.card-footer {
-  margin-top: 30px;
-  padding-top: 20px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  width: 100%;
-}
-
-.succinct-branding {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  font-size: 0.9em;
-  color: #d1d5db;
-}
-
-.team-colors {
-  display: flex;
-  gap: 5px;
-}
-
-.color-dot {
-  width: 15px;
-  height: 15px;
-  border-radius: 50%;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
-}
-
-
-/* Action Buttons Section */
-.result-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  width: 100%;
-  max-width: 400px; /* Limit button section width */
-  margin: 0 auto;
-}
-
-.primary-actions, .secondary-actions, .staking-action {
-  display: flex;
-  gap: 15px;
-  justify-content: center;
-  flex-wrap: wrap; /* Allow buttons to wrap on smaller screens */
-}
-
-.download-button, .share-x-button, .play-again-button, .leaderboard-button, .stake-button {
-  padding: 15px 25px;
-  border: none;
-  border-radius: 12px;
-  font-size: 1.1em;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-  flex-grow: 1; /* Allow buttons to grow to fill space */
-  min-width: 150px; /* Ensure minimum width */
-}
-
-.download-button {
-  background: linear-gradient(90deg, #61C3FF, #B753FF); /* Blue to Purple */
-  color: #1a022b;
-}
-
-.share-x-button {
-  background: linear-gradient(90deg, #FF54D7, #FF955E); /* Pink to Orange */
-  color: #ffffff;
-}
-
-.play-again-button {
-  background: linear-gradient(90deg, #B0FF6F, #61C3FF); /* Green to Blue */
-  color: #1a022b;
-}
-
-.leaderboard-button {
-  background: linear-gradient(90deg, #B753FF, #FF54D7); /* Purple to Pink */
-  color: #ffffff;
-}
-
-.stake-button {
-  background: linear-gradient(90deg, #FF955E, #B0FF6F); /* Orange to Green */
-  color: #1a022b;
-  width: 100%; /* Full width for the stake button */
-}
-
-/* Hover effects for all buttons */
-.download-button:hover, .share-x-button:hover,
-.play-again-button:hover, .leaderboard-button:hover, .stake-button:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-  filter: brightness(1.1);
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .result-card {
-    padding: 30px;
-  }
-
-  .succinct-logo .logo-text {
-    font-size: 2rem;
-  }
-
-  .succinct-logo .logo-subtitle {
-    font-size: 1rem;
-  }
-
-  .user-pfp-large {
-    width: 80px;
-    height: 80px;
-  }
-
-  .username-large {
-    font-size: 1.5em;
-  }
-
-  .team-badge-large {
-    font-size: 0.8em;
-  }
-
-  .result-emoji {
-    font-size: 3em;
-  }
-
-  .final-score {
-    font-size: 2.8em;
-  }
-
-  .prove-token {
-    font-size: 1em;
-  }
-
-  .result-title {
-    font-size: 1.6em;
-  }
-
-  .result-text {
-    font-size: 1em;
-  }
-
-  .staking-reminder {
-    flex-direction: column;
-    text-align: center;
-    gap: 10px;
-  }
-
-  .result-actions {
-    max-width: 300px;
-  }
-
-  .download-button, .share-x-button, .play-again-button, .leaderboard-button, .stake-button {
-    padding: 12px 20px;
-    font-size: 1em;
-    min-width: unset; /* Remove min-width on smaller screens */
-  }
-}
-
-@media (max-width: 480px) {
-  .result-card {
-    padding: 20px;
-  }
-
-  .succinct-logo .logo-text {
-    font-size: 1.8rem;
-  }
-
-  .succinct-logo .logo-subtitle {
-    font-size: 0.9em;
-  }
-
-  .user-info-large {
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .user-pfp-large {
-    width: 70px;
-    height: 70px;
-  }
-
-  .username-large {
-    font-size: 1.3em;
-  }
-
-  .result-emoji {
-    font-size: 2.5em;
-  }
-
-  .final-score {
-    font-size: 2.2em;
-  }
-
-  .prove-token {
-    font-size: 0.9em;
-  }
-
-  .result-title {
-    font-size: 1.4em;
-  }
-
-  .result-text {
-    font-size: 0.9em;
-  }
-
-  .result-actions {
-    max-width: 100%; /* Allow buttons to take full width */
-  }
-
-  .primary-actions, .secondary-actions, .staking-action {
-    flex-direction: column; /* Stack buttons vertically */
-    gap: 10px;
-  }
-}
-/* frontend/src/pages/ResultPage.css */
-
-.result-page-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  background-color: #1a022b; /* Dark background */
-  font-family: 'Inter', sans-serif;
-  color: #ffffff;
-  position: relative;
-  overflow: hidden;
-  padding: 20px;
-  box-sizing: border-box;
-}
-
-/* Animated Background (consistent across pages) */
-.animated-background {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  z-index: 1;
-}
-
-.floating-shapes {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
-
-.shape {
-  position: absolute;
-  background: linear-gradient(45deg, rgba(183, 83, 255, 0.8), rgba(176, 255, 111, 0.8));
-  border-radius: 50%;
-  opacity: 0.6;
-  animation: float 15s infinite ease-in-out;
-}
-
-/* Specific shapes for celebration animation */
-.celebration-shape {
-  animation: float-celebration 10s infinite ease-in-out;
-  opacity: 0.8;
-}
-
-.shape-0 { width: 150px; height: 150px; top: 10%; left: 5%; animation-delay: 0s; animation-duration: 18s; }
-.shape-1 { width: 100px; height: 100px; top: 60%; left: 80%; animation-delay: 3s; animation-duration: 20s; }
-.shape-2 { width: 200px; height: 200px; top: 30%; left: 40%; animation-delay: 6s; animation-duration: 22s; }
-.shape-3 { width: 120px; height: 120px; top: 85%; left: 15%; animation-delay: 9s; animation-duration: 16s; }
-.shape-4 { width: 80px; height: 80px; top: 20%; right: 10%; animation-delay: 2s; animation-duration: 17s; }
-.shape-5 { width: 170px; height: 170px; bottom: 5%; left: 60%; animation-delay: 7s; animation-duration: 19s; }
-
-@keyframes float {
-  0% { transform: translate(0, 0) scale(1); opacity: 0.6; }
-  25% { transform: translate(20px, -20px) scale(1.05); opacity: 0.7; }
-  50% { transform: translate(0, 0) scale(1); opacity: 0.6; }
-  75% { transform: translate(-20px, 20px) scale(0.95); opacity: 0.5; }
-  100% { transform: translate(0, 0) scale(1); opacity: 0.6; }
-}
-
-@keyframes float-celebration {
-  0% { transform: translate(0, 0) rotate(0deg); opacity: 0.8; }
-  25% { transform: translate(30px, -30px) rotate(45deg); opacity: 0.9; }
-  50% { transform: translate(0, 0) rotate(90deg); opacity: 0.8; }
-  75% { transform: translate(-30px, 30px) rotate(135deg); opacity: 0.7; }
-  100% { transform: translate(0, 0) rotate(180deg); opacity: 0.8; }
-}
-
-/* Confetti Animation */
-.confetti {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  overflow: hidden;
-}
-
-.confetti-piece {
-  position: absolute;
-  width: 10px;
-  height: 10px;
-  background-color: #FF54D7; /* Pink */
-  opacity: 0;
-  animation: confetti-fall 3s ease-out forwards;
-}
-
-.confetti-piece.confetti-0 { background-color: #B0FF6F; left: 10%; animation-delay: 0s; } /* Green */
-.confetti-piece.confetti-1 { background-color: #61C3FF; left: 30%; animation-delay: 0.5s; } /* Blue */
-.confetti-piece.confetti-2 { background-color: #B753FF; left: 50%; animation-delay: 1s; } /* Purple */
-.confetti-piece.confetti-3 { background-color: #FF955E; left: 70%; animation-delay: 1.5s; } /* Orange */
-
-@keyframes confetti-fall {
-  0% { transform: translateY(-100px) rotateZ(0deg); opacity: 0; }
-  20% { opacity: 1; }
-  100% { transform: translateY(100vh) rotateZ(720deg); opacity: 0; }
-}
-
-
-/* Result Content Wrapper */
-.result-content-wrapper {
-  position: relative;
-  z-index: 10;
-  display: flex;
-  flex-direction: column; /* Card and buttons stacked */
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  max-width: 700px;
-  padding: 20px;
-  box-sizing: border-box;
+  gap: 15px; /* Reduced gap between result-card, action-buttons-wrapper, and staking-reminder-wrapper */
 }
 
 .result-card {
   /* Changed to solid background color and removed backdrop-filter */
   background-color: #1F2937; /* Solid dark grey/blue background */
   border-radius: 20px;
-  padding: 40px;
+  padding: 30px; /* Reduced padding */
   text-align: center;
   width: 100%;
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
   border: 1px solid rgba(255, 255, 255, 0.1);
   animation: fadeInScaleUp 0.5s ease-out forwards;
-  margin-bottom: 30px; /* Space between card and buttons */
+  /* Removed margin-bottom as gap on parent handles spacing */
 }
 
 /* Class to apply when exporting image via html2canvas */
-.result-card.clean-export {
-  /* Hide elements that shouldn't be in the screenshot */
-  /* For example, if you had a close button inside the card, you'd hide it here */
+.result-card.clean-export .result-actions,
+.result-card.clean-export .staking-reminder-wrapper { /* Hide these if they were inside the card */
+  display: none !important;
 }
 
 
@@ -643,12 +141,12 @@
 }
 
 .result-card-header {
-  margin-bottom: 30px;
+  margin-bottom: 20px; /* Reduced margin */
 }
 
 .succinct-logo .logo-text {
   display: block;
-  font-size: 2.5rem;
+  font-size: 2.2rem; /* Slightly reduced font size */
   font-weight: bold;
   margin-bottom: 5px;
   /* Removed background gradient and text-fill for no background color */
@@ -662,7 +160,7 @@
 
 .succinct-logo .logo-subtitle {
   display: block;
-  font-size: 1.25rem;
+  font-size: 1.1em; /* Slightly reduced font size */
   color: #d1d5db;
 }
 
@@ -677,13 +175,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 30px;
-  gap: 20px;
+  margin-bottom: 20px; /* Reduced margin */
+  gap: 15px; /* Reduced gap */
 }
 
 .user-pfp-large {
-  width: 100px;
-  height: 100px;
+  width: 90px; /* Slightly reduced size */
+  height: 90px; /* Slightly reduced size */
   border-radius: 50%;
   object-fit: cover;
   border: 3px solid #B753FF; /* Purple */
@@ -697,14 +195,14 @@
 }
 
 .username-large {
-  font-size: 1.8em;
+  font-size: 1.6em; /* Slightly reduced font size */
   color: #B0FF6F; /* Green */
-  margin-bottom: 5px;
+  margin-bottom: 3px; /* Reduced margin */
   text-shadow: 0 0 5px rgba(176, 255, 111, 0.5);
 }
 
 .team-badge-large {
-  padding: 8px 16px;
+  padding: 6px 12px; /* Reduced padding */
   border-radius: 20px;
   color: #000; /* Black text for contrast */
   font-weight: bold;
@@ -714,12 +212,12 @@
 
 /* Score Display */
 .score-display {
-  margin-bottom: 30px;
+  margin-bottom: 20px; /* Reduced margin */
 }
 
 .result-emoji {
-  font-size: 4em;
-  margin-bottom: 10px;
+  font-size: 3.5em; /* Slightly reduced font size */
+  margin-bottom: 8px; /* Reduced margin */
   animation: bounceIn 0.8s ease-out;
 }
 
@@ -731,7 +229,7 @@
 }
 
 .final-score {
-  font-size: 3.5em;
+  font-size: 3em; /* Slightly reduced font size */
   font-weight: bold;
   /* Removed background gradient and text-fill for no background color */
   background: none;
@@ -744,49 +242,51 @@
 }
 
 .prove-token {
-  font-size: 1.2em;
+  font-size: 1.1em; /* Slightly reduced font size */
   color: #d1d5db;
   font-weight: 500;
 }
 
 /* Result Message */
 .result-message {
-  margin-bottom: 40px;
+  margin-bottom: 30px; /* Reduced margin */
 }
 
 .result-title {
-  font-size: 2em;
+  font-size: 1.8em; /* Slightly reduced font size */
   font-weight: bold;
-  margin-bottom: 10px;
+  margin-bottom: 8px; /* Reduced margin */
   color: #ffffff; /* Default, overridden by specific classes */
 }
 
 .result-text {
-  font-size: 1.1em;
+  font-size: 1em; /* Slightly reduced font size */
   color: #e0e0e0;
   line-height: 1.5;
 }
 
-/* Staking Reminder */
+/* Staking Reminder - now directly inside result-card */
 .staking-reminder {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 10px; /* Reduced gap */
   background-color: rgba(176, 255, 111, 0.1); /* Light green background */
   border: 1px solid #B0FF6F; /* Green border */
   border-radius: 10px;
-  padding: 15px 20px;
-  margin-bottom: 30px;
+  padding: 12px 15px; /* Reduced padding */
+  margin-bottom: 20px; /* Reduced margin */
   box-shadow: 0 0 15px rgba(176, 255, 111, 0.3);
+  width: 100%; /* Take full width of parent */
+  box-sizing: border-box;
 }
 
 .reminder-icon {
-  font-size: 2em;
+  font-size: 1.8em; /* Slightly reduced font size */
   flex-shrink: 0;
 }
 
 .reminder-text {
-  font-size: 0.95em;
+  font-size: 0.9em; /* Slightly reduced font size */
   color: #e0e0e0;
   text-align: left;
 }
@@ -797,8 +297,8 @@
 
 /* Card Footer - Branding */
 .card-footer {
-  margin-top: 30px;
-  padding-top: 20px;
+  margin-top: 20px; /* Reduced margin */
+  padding-top: 15px; /* Reduced padding */
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   width: 100%;
 }
@@ -807,29 +307,29 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
-  font-size: 0.9em;
+  gap: 8px; /* Reduced gap */
+  font-size: 0.8em; /* Slightly reduced font size */
   color: #d1d5db;
 }
 
 .team-colors {
   display: flex;
-  gap: 5px;
+  gap: 4px; /* Reduced gap */
 }
 
 .color-dot {
-  width: 15px;
-  height: 15px;
+  width: 12px; /* Slightly reduced size */
+  height: 12px; /* Slightly reduced size */
   border-radius: 50%;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
 }
 
 
-/* Action Buttons Section */
+/* Action Buttons Section - now outside the result-card */
 .result-actions {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 15px; /* Reduced gap */
   width: 100%;
   max-width: 400px; /* Limit button section width */
   margin: 0 auto;
@@ -837,167 +337,174 @@
 
 .primary-actions, .secondary-actions, .staking-action {
   display: flex;
-  gap: 15px;
+  gap: 10px; /* Reduced gap */
   justify-content: center;
   flex-wrap: wrap; /* Allow buttons to wrap on smaller screens */
 }
 
-.download-button, .share-x-button, .play-again-button, .leaderboard-button, .stake-button {
-  padding: 15px 25px;
+.result-button { /* General style for all result page buttons */
+  padding: 12px 20px; /* Reduced padding */
   border: none;
-  border-radius: 12px;
-  font-size: 1.1em;
+  border-radius: 10px; /* Slightly reduced border-radius */
+  font-size: 1em; /* Slightly reduced font size */
   font-weight: bold;
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
   flex-grow: 1; /* Allow buttons to grow to fill space */
-  min-width: 150px; /* Ensure minimum width */
+  min-width: 140px; /* Slightly reduced min-width */
+  text-align: center; /* Added to center text */
 }
 
-.download-button {
-  background: linear-gradient(90deg, #61C3FF, #B753FF); /* Blue to Purple */
-  color: #1a022b;
-}
-
-.share-x-button {
-  background: linear-gradient(90deg, #FF54D7, #FF955E); /* Pink to Orange */
-  color: #ffffff;
-}
-
-.play-again-button {
-  background: linear-gradient(90deg, #B0FF6F, #61C3FF); /* Green to Blue */
-  color: #1a022b;
-}
-
-.leaderboard-button {
-  background: linear-gradient(90deg, #B753FF, #FF54D7); /* Purple to Pink */
-  color: #ffffff;
-}
-
-.stake-button {
-  background: linear-gradient(90deg, #FF955E, #B0FF6F); /* Orange to Green */
-  color: #1a022b;
-  width: 100%; /* Full width for the stake button */
-}
-
-/* Hover effects for all buttons */
-.download-button:hover, .share-x-button:hover,
-.play-again-button:hover, .leaderboard-button:hover, .stake-button:hover {
+.result-button:hover:not(:disabled) {
   transform: translateY(-3px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
   filter: brightness(1.1);
 }
 
+.result-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Specific Button Styles */
+.download-button {
+  background: linear-gradient(90deg, #B0FF6F, #61C3FF); /* Green to Blue */
+  color: #1a022b; /* Dark text for contrast */
+}
+
+.share-x-button {
+  background: linear-gradient(90deg, #FF54D7, #B753FF); /* Pink to Purple */
+  color: #ffffff;
+}
+
+.play-again-button {
+  background: linear-gradient(90deg, #B753FF, #61C3FF); /* Purple to Blue */
+  color: #ffffff;
+}
+
+.leaderboard-button { /* Renamed from .home-button */
+  background: linear-gradient(90deg, #FF955E, #FF54D7); /* Orange to Pink */
+  color: #ffffff;
+}
+
+.stake-button {
+  background: linear-gradient(90deg, #B0FF6F, #FF955E); /* Green to Orange */
+  color: #1a022b;
+}
+
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .result-card {
-    padding: 30px;
+    padding: 25px; /* Further reduced padding */
   }
 
   .succinct-logo .logo-text {
-    font-size: 2rem;
+    font-size: 1.8rem; /* Further reduced font size */
   }
 
   .succinct-logo .logo-subtitle {
-    font-size: 1rem;
+    font-size: 0.9em; /* Further reduced font size */
   }
 
   .user-pfp-large {
-    width: 80px;
-    height: 80px;
+    width: 70px; /* Further reduced size */
+    height: 70px; /* Further reduced size */
   }
 
   .username-large {
-    font-size: 1.5em;
+    font-size: 1.3em; /* Further reduced font size */
   }
 
   .team-badge-large {
-    font-size: 0.8em;
+    font-size: 0.7em; /* Further reduced font size */
   }
 
   .result-emoji {
-    font-size: 3em;
+    font-size: 3em; /* Further reduced font size */
   }
 
   .final-score {
-    font-size: 2.8em;
+    font-size: 2.5em; /* Further reduced font size */
   }
 
   .prove-token {
-    font-size: 1em;
+    font-size: 0.9em; /* Further reduced font size */
   }
 
   .result-title {
-    font-size: 1.6em;
+    font-size: 1.5em; /* Further reduced font size */
   }
 
   .result-text {
-    font-size: 1em;
+    font-size: 0.9em; /* Further reduced font size */
   }
 
   .staking-reminder {
-    flex-direction: column;
-    text-align: center;
-    gap: 10px;
+    padding: 10px 12px; /* Further reduced padding */
+  }
+
+  .reminder-text {
+    font-size: 0.85em; /* Further reduced font size */
   }
 
   .result-actions {
-    max-width: 300px;
+    max-width: 280px; /* Further reduced max-width */
   }
 
-  .download-button, .share-x-button, .play-again-button, .leaderboard-button, .stake-button {
-    padding: 12px 20px;
-    font-size: 1em;
+  .result-button {
+    padding: 10px 15px; /* Further reduced padding */
+    font-size: 0.9em; /* Further reduced font size */
     min-width: unset; /* Remove min-width on smaller screens */
   }
 }
 
 @media (max-width: 480px) {
   .result-card {
-    padding: 20px;
+    padding: 15px; /* Even further reduced padding */
   }
 
   .succinct-logo .logo-text {
-    font-size: 1.8rem;
+    font-size: 1.5rem; /* Even further reduced font size */
   }
 
   .succinct-logo .logo-subtitle {
-    font-size: 0.9em;
+    font-size: 0.8em; /* Even further reduced font size */
   }
 
   .user-info-large {
     flex-direction: column;
-    gap: 10px;
+    gap: 8px; /* Even further reduced gap */
   }
 
   .user-pfp-large {
-    width: 70px;
-    height: 70px;
+    width: 60px; /* Even further reduced size */
+    height: 60px; /* Even further reduced size */
   }
 
   .username-large {
-    font-size: 1.3em;
+    font-size: 1.1em; /* Even further reduced font size */
   }
 
   .result-emoji {
-    font-size: 2.5em;
+    font-size: 2.2em; /* Even further reduced font size */
   }
 
   .final-score {
-    font-size: 2.2em;
+    font-size: 2em; /* Even further reduced font size */
   }
 
   .prove-token {
-    font-size: 0.9em;
+    font-size: 0.8em; /* Even further reduced font size */
   }
 
   .result-title {
-    font-size: 1.4em;
+    font-size: 1.2em; /* Even further reduced font size */
   }
 
   .result-text {
-    font-size: 0.9em;
+    font-size: 0.8em; /* Even further reduced font size */
   }
 
   .result-actions {
@@ -1006,6 +513,6 @@
 
   .primary-actions, .secondary-actions, .staking-action {
     flex-direction: column; /* Stack buttons vertically */
-    gap: 10px;
+    gap: 8px; /* Even further reduced gap */
   }
 }
